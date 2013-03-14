@@ -34,6 +34,9 @@ alias pgrep='ps aux | grep $1'
 alias reboot='sudo reboot'
 alias halt='sudo halt'
 
-alias pac="sudo pacman -S"		# default action - install one or more packages
+alias pac="sudo pacman -S"		    # default action - install one or more packages
 alias pacs="sudo pacman -Ss"		# '[s]earch' - search for a package using one or more keywords
 alias pacu="sudo pacman -Syu"		# '[u]pdate' - upgrade all packages to their newest version
+alias sysctl="systemctl"
+alias sysctle="systemctl enable"
+alias sysctlr="systemctl restart"

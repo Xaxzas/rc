@@ -5,6 +5,17 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+# Helper scripts
+# You may want to put all your additions into a separate file like
+# ~/.bash_scripts, instead of adding them here directly.
+if [ -f ~/.bash_scripts ]; then
+    . ~/.bash_scripts
+fi
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
     xterm-color) color_prompt=yes;;
@@ -27,18 +38,23 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-#    PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-    # http://maketecheasier.com/8-useful-and-interesting-bash-prompts/2009/09/04
-    PS1="\n\[\033[1;37m\]\342\224\214($(if [[ ${EUID} == 0 ]]; then echo '\[\033[01;31m\]\h'; else echo '\[\033[01;34m\]\u@\h'; fi)\[\033[1;37m\])\342\224\200(\$(if [[ \$? == 0 ]]; then echo \"\[\033[01;32m\]\342\234\223\"; else echo \"\[\033[01;31m\]\342\234\227\"; fi)\[\033[1;37m\])\342\224\200(\[\033[1;34m\]\@ \d\[\033[1;37m\])\[\033[1;37m\]\n\342\224\224\342\224\200(\[\033[1;32m\]\w\[\033[1;37m\])\342\224\200(\[\033[1;32m\]\$(ls -1 | wc -l | sed 's: ::g') files, \$(ls -lah | grep -m 1 total | sed 's/total //')b\[\033[1;37m\])\342\224\200> \[\033[0m\]"
+    #PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    DARKBLUE="\[\e[0;34m\]"
+    BLUE="\[\e[1;34m\]"
+    WHITE="\[\e[1;37m\]"
+    CLEARCOLOR="\[\e[0m\]"
+    PS1="\n$DARKBLUE\342\224\214\342\224\200$BLUE[\$(get_battery)$BLUE]$DARKBLUE\342\224\200$BLUE[$WHITE\t$BLUE]$DARKBLUE\342\224\200$BLUE[$WHITE\$(chop_dir)$BLUE]$DARKBLUE\n\342\224\224\342\224\200$BLUE[$(if [[ $? == 0 ]]; then echo "\[\033[01;32m\]\342\234\223"; else echo "\[\033[01;31m\]\342\234\227"; fi)$BLUE]$DARKBLUE\342\224\200$BLUE[$WHITE\u$BLUE@$WHITE\h$BLUE]$DARKBLUE\342\224\200>$CLEARCOLOR "
+    PS2="\342\224\200>"
 else
     PS1='[\u@\h \W]\$ '
+    PS2='> '
 fi
 unset color_prompt force_color_prompt
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
 xterm*|rxvt*)
-    PS1="\[\e]0;[\u@\h: \w\a\]$PS1"
+    PS1="\[\e]0;[\u@\h: \w]\a\]$PS1"
     ;;
 *)
     ;;
@@ -75,11 +91,20 @@ export EDITOR="nano"
 export PATH=~/bin:$PATH
 export ANDROID_SDK=/opt/android-sdk
 export ANDROID_NDK=/opt/android-ndk
-export PATH=$ANDROID_SDK/tools:$ANDROID_SDK/platform-tools:$PATH
-export PATH=$ANDROID_NDK:$ANDROID_NDK/prebuilt/linux-x86/bin:$ANDROID_NDK/toolchains/arm-linux-androideabi-4.7/prebuilt/linux-x86/bin:$PATH
+if [[ -d $ANDROID_SDK ]] ; then
+    export PATH=$ANDROID_SDK/tools:$ANDROID_SDK/platform-tools:$PATH
+fi
+if [[ -d $ANDROID_NDK ]] ; then
+    export PATH=$ANDROID_NDK:$ANDROID_NDK/prebuilt/linux-x86/bin:$ANDROID_NDK/toolchains/arm-linux-androideabi-4.7/prebuilt/linux-x86/bin:$PATH
+fi
 
 # auto cd into folders
 shopt -s autocd
 
 # display system information
-archey
+if [[ "`get_distribution`" == "archlinux" ]] ; then
+    archey
+elif [[ "`get_distribution`" == "debian" ]] ; then
+    # run some debian specific info tool
+    echo "no info"
+fi
