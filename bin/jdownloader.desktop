@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Name=jDownloader
+GenericName=jDownloader
+Comment=Downloader
+Exec=jdownloader
+Terminal=false
+Icon=jdownloader
+Type=Application
+Categories=Network;
+MimeType=;

@@ -60,3 +60,11 @@ get_distribution() {
         echo "unknown"
     fi
 }
+
+get_proxy() {
+    if [[ "$http_proxy" == "" ]]; then
+        echo "0"
+    else
+        echo "1"
+    fi
+}

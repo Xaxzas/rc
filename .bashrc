@@ -43,7 +43,7 @@ if [ "$color_prompt" = yes ]; then
     BLUE="\[\e[1;34m\]"
     WHITE="\[\e[1;37m\]"
     CLEARCOLOR="\[\e[0m\]"
-    PS1="\n$DARKBLUE\342\224\214\342\224\200$BLUE[\$(get_battery)$BLUE]$DARKBLUE\342\224\200$BLUE[$WHITE\t$BLUE]$DARKBLUE\342\224\200$BLUE[$WHITE\$(chop_dir)$BLUE]$DARKBLUE\n\342\224\224\342\224\200$BLUE[$(if [[ $? == 0 ]]; then echo "\[\033[01;32m\]\342\234\223"; else echo "\[\033[01;31m\]\342\234\227"; fi)$BLUE]$DARKBLUE\342\224\200$BLUE[$WHITE\u$BLUE@$WHITE\h$BLUE]$DARKBLUE\342\224\200>$CLEARCOLOR "
+    PS1="\n$DARKBLUE\342\224\214\342\224\200$BLUE[\$(get_battery)$BLUE]$DARKBLUE\342\224\200$BLUE[$WHITE\t$BLUE]$DARKBLUE\342\224\200$BLUE[$WHITE\$(chop_dir)$BLUE]$DARKBLUE\n\342\224\224\342\224\200$BLUE[$(if [[ $? == 0 ]]; then echo "\[\033[01;32m\]\342\234\223"; else echo "\[\033[01;31m\]\342\234\227"; fi)$BLUE]$BLUE$DARKBLUE\342\224\200$BLUE[\$(get_proxy)$BLUE]$DARKBLUE\342\224\200$BLUE[$WHITE\u$BLUE@$WHITE\h$BLUE]$DARKBLUE\342\224\200>$CLEARCOLOR "
     PS2="\342\224\200>"
 else
     PS1='[\u@\h \W]\$ '
@@ -96,6 +96,10 @@ if [[ -d $ANDROID_SDK ]] ; then
 fi
 if [[ -d $ANDROID_NDK ]] ; then
     export PATH=$ANDROID_NDK:$ANDROID_NDK/prebuilt/linux-x86/bin:$ANDROID_NDK/toolchains/arm-linux-androideabi-4.7/prebuilt/linux-x86/bin:$PATH
+fi
+
+if [[ -d /opt/pgs4a ]] ; then
+    export PATH='/opt/pgs4a':$PATH
 fi
 
 # auto cd into folders

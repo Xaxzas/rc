@@ -1,7 +1,11 @@
 #!/bin/bash
 # install prerequirements
 
+# install jdownloader desktop file
+sudo cp ~/bin/jdownloader.desktop /usr/share/applications/
+
 if [[  ]] ; then
+    sudo update-menus
     sudo apt-get update
     sudo apt-get upgrade
     #sudo apt-get install ...
