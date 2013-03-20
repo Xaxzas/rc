@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# define standard values
+INPUT=""
+OUTPUT=""
+BS=""
+COUNT=""
+
+# get params
+for param in "$@"; do
+    case "$param" in
+        if=*)    INPUT="$param"
+                ;;
+        of=*)    OUTPUT="$param"
+                ;;
+        bs=*)    BS="$param"
+                ;;
+        count=*) COUNT="$param"
+                ;;
+    esac
+done;
+
+# check if needed params are there
+if [ -z "$INPUT" ] || [ -z "$OUTPUT" ] ; then
+    echo "Need more parameters. At least if and of must be given."
+    exit
+fi
+
+# check for pv
+if [ -z "$(which pv)" ] ; then
+    echo "This script needs pv. Please install it first."
+    exit
+fi
+
+# check for dd
+if [ -z "$(which dd)" ] ; then
+    echo "This script needs dd. Please install it first."
+    exit
+fi
+
+# check if input file has a size
+if [ -f "`echo $INPUT | sed -r 's/^.{3}//'`" ] ; then
+    SIZE=$(stat -c%s `echo $INPUT | sed -r 's/^.{3}//'`)
+else
+    SIZE=0
+fi
+
+# build dd command
+if [ $SIZE != 0 ] ; then
+    dd $INPUT $BS $COUNT status=noxfer | pv -s $SIZE | dd $BS $OUTPUT
+else
+    dd $INPUT $BS $COUNT status=noxfer | pv | dd $BS $OUTPUT
+fi

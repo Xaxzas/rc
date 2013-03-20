@@ -1,0 +1,4 @@
+export http_proxy='proxy.fh-brandenburg.de:3128'
+export https_proxy='proxy.fh-brandenburg.de:3128'
+export ftp_proxy='ftp-proxy.fh-brandenburg.de:21'
+export socks5_proxy='socks5-proxy.fh-brandenburg.de:1080'
