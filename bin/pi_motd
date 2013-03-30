@@ -1,0 +1,31 @@
+#!/bin/bash
+
+let upSeconds="$(/usr/bin/cut -d. -f1 /proc/uptime)"
+let secs=$((${upSeconds}%60))
+let mins=$((${upSeconds}/60%60))
+let hours=$((${upSeconds}/3600%24))
+let days=$((${upSeconds}/86400))
+UPTIME=`printf "%dd %02d:%02d:%02d" "$days" "$hours" "$mins" "$secs"`
+read one five fifteen rest < /proc/loadavg
+IPADDRESS=`ifconfig eth0 | grep "inet addr" | cut -d ":" -f 2 | cut -d " " -f 1`
+
+echo -e "\e[0;32m
+    .~~.   .~~.
+   '. \ ' ' / .'\e[0;31m
+    .~ .~~~..~.    \e[0;37m                   _                          _ \e[0;31m
+   : .~.'~'.~. :   \e[0;37m   ___ ___ ___ ___| |_ ___ ___ ___ _ _    ___|_|\e[0;31m
+  ~ (   ) (   ) ~  \e[0;37m  |  _| .'|_ -| . | . | -_|  _|  _| | |  | . | |\e[0;31m
+ ( : '~'.~.'~' : ) \e[0;37m  |_| |__,|___|  _|___|___|_| |_| |_  |  |  _|_|\e[0;31m
+  ~ .~ (   ) ~. ~  \e[0;37m              |_|                 |___|  |_|    \e[0;31m
+   (  : '~' :  )
+    '~ .~~~. ~'
+        '~'
+
+        \e[1;34mHostname\e[1;30m...........: \e[0;34m`hostname -f`
+        \e[1;34mSystem\e[1;30m.............: \e[0;34m`uname -srmo`
+        \e[1;34mIP Adresses\e[1;30m........: \e[0;34m$(if [[ -z '$IPADDRESS' ]] ; then echo $IPADDRESS ; else echo '-' ; fi) (local) / `wget -q -O - http://icanhazip.com/ | tail` (inet)
+        \e[1;34mUptime\e[1;30m.............: \e[0;34m${UPTIME}
+        \e[1;34mRootfs\e[1;30m.............: \e[0;34m`df -h 2> /dev/null | grep 'dev/root' | awk '{print $3}'` / `df -h 2> /dev/null | grep 'dev/root' | awk '{print $2}'`
+        \e[1;34mMemory\e[1;30m.............: \e[0;34m`cat /proc/meminfo | grep MemFree | awk {'print $2'}`kB (Free) / `cat /proc/meminfo | grep MemTotal | awk {'print $2'}`kB (Total)
+        \e[1;34mRunning Processes\e[1;30m..: \e[0;34m`ps ax | wc -l | tr -d " "`
+        \e[1;34mLoad Averages\e[1;30m......: \e[0;34m${one}, ${five}, ${fifteen} (1, 5, 15 min)\e[0;30m"

@@ -1,7 +1,15 @@
-# ~/.bash_scripts: executed by bash(1) for non-login shells.
-# contains helper scripts for .bashrc
+#!/bin/bash
+################################################################################
+# rc files by XenGi                                                            #
+# =================                                                            #
+# use preinstall.sh to install needed packages                                 #
+# see all files on github: https://github.com/XenGi/rc                         #
+#                                                                              #
+# ~/.bash_scripts: executed by bash(1) for non-login shells.                   #
+# contains helper scripts for .bashrc                                          #
+################################################################################
 
-# shortens the directory to 56 chars
+# shortens the directory to 56 chars so that it fits into PS1
 chop_dir() {
     dir=$(echo $PWD | sed "s:^$HOME:~:")
 
@@ -23,37 +31,51 @@ chop_dir() {
 # 6  84-99% -> green
 # 7    100% -> blue
 get_battery() {
-    bat_level="`cat /sys/class/power_supply/BAT0/capacity`"
-    bat_bars=`bc <<< "((6*$bat_level/100)+1)"`
+    if [[ -f /sys/class/power_supply/BAT0/capacity ]] ; then
+        bat_level="`cat /sys/class/power_supply/BAT0/capacity`"
+        bat_bars=`bc <<< "((6*$bat_level/100)+1)"`
 
-    case $bat_bars in
-        7)  echo -e "\e[1;34m######"       # blue
-            ;;
-        6)  echo -e "\e[0;32m######"       # green
-            ;;
-        5)  echo -e "\e[1;32m#####\e[1;37m-"       # green
-            ;;
-        4)  echo -e "\e[1;32m####\e[1;37m--"       # green
-            ;;
-        3)  echo -e "\e[1;32m###\e[1;37m---"       # green
-            ;;
-        2)  echo -e "\e[0;33m##\e[1;37m----"       # yellow
-            ;;
-        1)  if [[ $bat_level -gt 9 ]] ; then
-                echo -e "\e[1;33m#\e[1;37m-----"   # orange
-            else
-                echo -e "\e[0;31m!\e[1;37m-----"   # red
-            fi
-            ;;
-        *)  echo -e "\e[0;31merror!"
-            ;;
-    esac
+        case $bat_bars in
+            # blue
+            7)  echo -e "\e[1;34m######"
+                ;;
+            # green
+            6)  echo -e "\e[0;32m######"
+                ;;
+            5)  echo -e "\e[1;32m#####\e[1;37m-"
+                ;;
+            4)  echo -e "\e[1;32m####\e[1;37m--"
+                ;;
+            3)  echo -e "\e[1;32m###\e[1;37m---"
+                ;;
+            # yellow
+            2)  echo -e "\e[0;33m##\e[1;37m----"
+                ;;
+            1)  if [[ $bat_level -gt 9 ]] ; then
+                    # orange
+                    echo -e "\e[1;33m#\e[1;37m-----"
+                else
+                    # red
+                    echo -e "\e[0;31m!\e[1;37m-----"
+                fi
+                ;;
+            *)  echo -e "\e[0;31merror!"
+                ;;
+        esac
+    else
+        # white
+        echo -e "\e[1;37mno bat"
+    fi
 }
 
 # check which distribution we are running and return it's name
 get_distribution() {
-    if [[ -f /etc/debian_version ]]; then
-        echo "debian"
+    if [[ -f /etc/debian_version ]] ; then
+        if [[ -f /etc/rpi-issue ]] ; then
+            echo "raspbian"
+        else
+            echo "debian"
+        fi
     elif [[ -f /etc/arch-release ]] ; then
         echo "archlinux"
     else
@@ -61,6 +83,7 @@ get_distribution() {
     fi
 }
 
+# check if a proxy is exported
 get_proxy() {
     if [[ "$http_proxy" == "" ]]; then
         echo "0"

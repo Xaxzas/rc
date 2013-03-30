@@ -1,19 +1,78 @@
 #!/bin/bash
-# install prerequirements
+################################################################################
+# rc files by XenGi                                                            #
+# =================                                                            #
+# use preinstall.sh to install needed packages                                 #
+# see all files on github: https://github.com/XenGi/rc                         #
+################################################################################
+
+echo "welcome to the rc file install wizard"
+echo "====================================="
+echo
+
+# server or desktop install
+echo -n "Is this mashine running a GUI? [y/N]: "
+read gui
+
+if [[ "${gui,,}" -eq "y" ]] ; then
+    GUI=true
+else
+    GUI=false
+fi
+
+# load helper scripts
+source .bash_scripts
 
 # install jdownloader desktop file
-sudo cp ~/bin/jdownloader.desktop /usr/share/applications/
+if [[ $GUI ]] ; then
+    sudo cp ~/bin/jdownloader.desktop /usr/share/applications/
+fi
 
-if [[ -f '/etc/debian_version' ]] ; then
-    sudo update-menus
+# setup stuff for debian and raspbian
+if [[ "`get_dristribution`" -eq "debian" -o "`get_dristribution`" -eq "raspbian" ]] ; then
+    if [[ $GUI ]] ; then
+        # add jdownloader menu entry
+        sudo update-menus
+    fi
+    
+    # update packages
     sudo apt-get update
     sudo apt-get upgrade
-    #TODO: check for correct conky package names
-    sudo apt-get install dd pv less tree htop powertop conky conky-colors
-elif [[ -f '/etc/arch-release' ]] ; then
+    
+    # install needed packages
+    sudo apt-get install dd pv less tree htop
+    
+    # setup debian specific stuff
+    if [[ "`get_dristribution`" -eq "debian" ]] ; then
+        # install things that work different on raspbian
+        sudo apt-get install powertop lsb-release scrot
+        if [[ $GUI ]] ; then
+            #TODO: test if dependencies must be installed seperately
+            #sudo apt-get install python-statgrab python-keyring ttf-ubuntu-font-family hddtemp curl lm-sensors conky-all
+            sudo wget -O /tmp/archey-0.2.8.deb https://github.com/downloads/djmelik/archey/archey-0.2.8.deb
+            sudo dpkg -i /tmp/archey-0.2.8.deb
+            sudo rm -f /tmp/archey-0.2.8.deb
+            sudo apt-get install -f
+        fi
+    # setup raspbian specific stuff
+    else
+        
+        
+    fi
+# setup archlinux specific stuff
+elif [[ "`get_dristribution`" -eq "archlinux" ]] ; then
+    # update packages
     sudo pacman -Syu
-    sudo pacman -S colordiff dd pv less tree htop powertop conky
+    
+    # install needed packages
+    sudo pacman -S colordiff dd pv less tree htop powertop
+    if [[ $GUI ]] ; then
+        sudo pacman -S conky
+    fi
+    
+    # test if yaourt is already installed and if not install it
     if [[ -z "`which yaourt`" ]] ; then
+        # instal dependencies
         sudo pacman -S base-devel
 
         # install package-query
@@ -30,7 +89,13 @@ elif [[ -f '/etc/arch-release' ]] ; then
         sudo makepkg -si
         sudo rm -rf /tmp/yaourt*
     fi
-    yaourt -S archey2 conky-colors
+    
+    # install packages from AUR
+    yaourt -S archey2
+    yaourt -S pacman-color
+    if [[ $GUI ]] ; then
+        yaourt -S conky-colors
+    fi
 else
-    echo "Unknown linux distribution. Supported dists are Debian and Archlinux."
+    echo "Unknown linux distribution. Supported dists are Debian, Raspbian and Archlinux."
 fi
