@@ -60,4 +60,7 @@ elif [[ "`get_distribution`" == "debian" ]] || [[ "`get_distribution`" == "raspb
     alias agu='sudo apt-get update'
     alias agug='sudo apt-get upgrade'
     alias agud='sudo apt-get dist-upgrade'
+    alias agi='sudo apt-get install'
+    alias agr='sudo apt-get remove'
+    alias agp='sudo apt-get remove --purge'
 fi

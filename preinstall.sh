@@ -45,7 +45,7 @@ if [[ "$distribution" == "debian" ]] || [[ "$distribution" == "raspbian" ]] ; th
 
     # install needed packages
     echo "==> Installing new packages"
-    sudo apt-get install dd pv less tree htop
+    sudo apt-get install coreutils pv less tree htop colordiff
 
     # setup debian specific stuff
     if [[ "$distribution" == "debian" ]] ; then
