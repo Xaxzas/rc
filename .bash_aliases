@@ -27,10 +27,12 @@ alias ll='ls -lh'
 alias la='ls -a'
 alias lal='ls -lah'
 
+# secure some commands
 alias mv='mv -i'
 alias rm='rm -I'
 alias ln='ln -i'
 
+# change standard behavier of standard tools
 alias diff='colordiff'
 alias more='less'
 alias df='df -h'
@@ -41,6 +43,9 @@ alias ..='cd ..'
 alias pgrep='ps aux | grep $1'
 alias reboot='sudo reboot'
 alias halt='sudo halt'
+
+# use own dede for dd
+alias dd='dede'
 
 # pacman and systemctl aliases for archlinux
 if [[ "`get_distribution`" -eq "archlinux" ]] ; then
