@@ -54,6 +54,14 @@ if [[ "$color_prompt" = yes ]] ; then
     DARKCOLOR="\[\e[0;34m\]"
     LIGHTCOLOR="\[\e[1;34m\]"
 
+    # red theme
+    #DARKCOLOR="\[\e[0;31m\]"
+    #LIGHTCOLOR="\[\e[1;31m\]"
+
+    # green theme
+    #DARKCOLOR="\[\e[0;32m\]"
+    #LIGHTCOLOR="\[\e[1;32m\]"
+
     # other colors
     WHITE="\[\e[1;37m\]"
     CLEARCOLOR="\[\e[0m\]"
@@ -130,7 +138,7 @@ fi
 
 # display system information
 if [[ "`get_distribution`" == "raspbian" ]] ; then
-    rpi_motd
+    pi_motd
 elif [[ "`get_distribution`" != "unknown" ]] ; then
     archey
 fi
