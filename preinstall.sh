@@ -74,7 +74,7 @@ elif [[ "$distribution" == "archlinux" ]] ; then
 
     # install needed packages
     echo "==> Installing new packages"
-    sudo pacman -S colordiff dd pv less tree htop powertop
+    sudo pacman -S colordiff coreutils pv less tree htop powertop
 
     # test if yaourt is already installed and if not install it
     if [[ -z "`which yaourt`" ]] ; then
@@ -110,14 +110,14 @@ fi
 
 # copy the right files to home dir
 echo "==> Copying new rc files to user dir"
-cp -vr .bash_logout .bashrc .bash_aliases .bash_scripts .profile ~/
+cp -v .bash_logout .bashrc .bash_aliases .bash_scripts .profile ~/
 mkdir ~/bin
 cp -v bin/dede bin/proxyon bin/fhb_proxy.sh bin/proxyoff bin/wol ~/bin/
 if [[ "$distribution" == "raspbian" ]] ; then
     cp -v bin/pi_motd ~/bin/
 fi
 if [[ "$REPLY" == "y" ]] ; then
-    cp .conkycolors ~/
+    cp -rv .conkycolors ~/
     cp -v bin/gnome_startup.sh bin/jdownloader bin/jdownloader.svg ~/bin/
 fi
 echo "==> Setup complete. Enjoy your new system!"
