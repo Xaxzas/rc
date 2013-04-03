@@ -13,8 +13,8 @@
 chop_dir() {
     dir=$(echo $PWD | sed "s:^$HOME:~:")
 
-    if [[ `expr length "$dir"` -gt 56 ]] ; then
-        echo "...${dir:(-53)}"
+    if [[ `expr length "$dir"` -gt $(($COLUMNS-24)) ]] ; then
+        echo "...${dir:($((-1*($COLUMNS-27))))}"
     else
         echo "$dir"
     fi
