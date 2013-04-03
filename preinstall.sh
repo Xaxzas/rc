@@ -19,7 +19,7 @@ source .bash_scripts
 # install jdownloader desktop file
 if [[ "$REPLY" == "y" ]] ; then
     echo "==> Adding jDownloader menu entry"
-    sudo cp ~/bin/jdownloader.desktop /usr/share/applications/
+    sudo cp bin/jdownloader.desktop /usr/share/applications/
 fi
 
 distribution="`get_distribution`"
@@ -75,10 +75,6 @@ elif [[ "$distribution" == "archlinux" ]] ; then
     # install needed packages
     echo "==> Installing new packages"
     sudo pacman -S colordiff dd pv less tree htop powertop
-    if [[ "$REPLY" == "y" ]] ; then
-        echo "==> Installing conky"
-        sudo pacman -S conky
-    fi
 
     # test if yaourt is already installed and if not install it
     if [[ -z "`which yaourt`" ]] ; then
@@ -122,6 +118,6 @@ if [[ "$distribution" == "raspbian" ]] ; then
 fi
 if [[ "$REPLY" == "y" ]] ; then
     cp .conkycolors ~/
-    cp -v bin/gnome_startup.sh bin/jdownloader.desktop bin/jdownloader bin/jdownloader.svg ~/bin/
+    cp -v bin/gnome_startup.sh bin/jdownloader bin/jdownloader.svg ~/bin/
 fi
 echo "==> Setup complete. Enjoy your new system!"
